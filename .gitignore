@@ -30,3 +30,28 @@
 *.exe
 *.out
 *.app
+
+# In souce build support
+# Visual studio project files
+Debug/
+x64/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+.vs/
+
+# CMake temp files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
+# Conan temp files
+conan.cmake
+conanbuildinfo.cmake
+conanbuildinfo.txt
+conanbuildinfo_debug.cmake
+conanbuildinfo_multi.cmake
+conanbuildinfo_release.cmake
+conanfile.txt
+conaninfo.txt
