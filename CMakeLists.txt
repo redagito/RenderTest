@@ -4,21 +4,21 @@ project (RenderTest)
 # Download automatically, you can also just copy the conan.cmake file
 if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
    message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
-   file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/v0.12/conan.cmake"
+   file(DOWNLOAD "https://github.com/conan-io/cmake-conan/raw/master/conan.cmake"
                  "${CMAKE_BINARY_DIR}/conan.cmake")
 endif()
 
 include(${CMAKE_BINARY_DIR}/conan.cmake)
 			 
 conan_cmake_run(REQUIRES
-	glfw/3.2.1.20180327@bincrafters/stable 
-	glm/0.9.9.0@g-truc/stable
+	glfw/3.3@bincrafters/stable 
+	glm/0.9.9.5@g-truc/stable
 	lua/5.3.4@zimmerk/stable 
 	jsonformoderncpp/3.1.2@vthiery/stable
-	pugixml/1.9@bincrafters/stable
-	sqlite3/3.21.0@bincrafters/stable
-	sdl2_image/2.0.3@bincrafters/stable
-	glad/0.1.24@bincrafters/stable 
+	pugixml/1.10@bincrafters/stable
+	sqlite3/3.29.0@bincrafters/stable
+	sdl2_image/2.0.5@bincrafters/stable
+	glad/0.1.29@bincrafters/stable 
 	
 	OPTIONS glad:profile=core
 	OPTIONS glad:api_type=gl

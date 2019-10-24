@@ -27,7 +27,7 @@ int guardedMain(int argc, char** argv)
 	};
 
 	Buffer vertexBuffer;
-	vertexBuffer.setData((GLfloat*)vertices, sizeof(vertices) / sizeof(GLfloat), GL_STATIC_DRAW);
+	vertexBuffer.setData((GLfloat*)vertices, sizeof(vertices) / sizeof(GLfloat), 0);
 
 	// Vertex array object
 	GLuint vertexArray;

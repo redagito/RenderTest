@@ -55,3 +55,7 @@ conanbuildinfo_multi.cmake
 conanbuildinfo_release.cmake
 conanfile.txt
 conaninfo.txt
+
+# Conan lock and build graph
+conan.lock
+graph_info.json
