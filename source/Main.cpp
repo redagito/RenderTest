@@ -1,63 +1,65 @@
 #include <iostream>
 
-#include "Window.h"
-#include "Buffer.h"
-#include "Shader.h"
 #include "ShaderCode.h"
+#include "RenderApplication.h"
 
-int guardedMain(int argc, char** argv)
+class App1 : public RenderApplication
 {
-	Window window{800, 600, "Render Test"};
-	window.setVSync(true);
-	window.setKeyCallback([](Window& w, int key, int scancode, int action, int mods) {
-		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		{
-			w.close();
-		}
-	});
+private:
+	Buffer m_vertexBuffer;
+	GLuint m_shader = 0;
 
-	// Vertices
-	static const GLfloat vertices[][2] = {
-		{-0.9f, -0.9f},
-		{0.85f, -0.9f},
-		{-0.9f, 0.85f},
-		{0.9f, -0.85f},
-		{0.9f, 0.9f},
-		{-0.85f, 0.9f}
-	};
-
-	Buffer vertexBuffer;
-	vertexBuffer.setData((GLfloat*)vertices, sizeof(vertices) / sizeof(GLfloat), 0);
-
-	// Vertex array object
-	GLuint vertexArray;
-	glGenVertexArrays(1, &vertexArray);
-	glBindVertexArray(vertexArray);
-
-	auto shader = createShaderProgram(vertexCode, fragmentCode);
-
-	while (window.isOpen())
+	bool setup() override
 	{
-		window.pollEvents();
+		// Vertices
+		static const GLfloat vertices[][2] = {
+			{-0.9f, -0.9f},
+			{0.85f, -0.9f},
+			{-0.9f, 0.85f},
+			{0.9f, -0.85f},
+			{0.9f, 0.9f},
+			{-0.85f, 0.9f}
+		};
 
+		m_vertexBuffer.setData((GLfloat*)vertices, sizeof(vertices) / sizeof(GLfloat), 0);
+
+		// Vertex array object
+		GLuint vertexArray;
+		glGenVertexArrays(1, &vertexArray);
+		glBindVertexArray(vertexArray);
+
+		m_shader = createShaderProgram(vertexCode, fragmentCode);
+		return true;
+	}
+
+	void render() override
+	{
 		// Clear color buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(shader);
+		glUseProgram(m_shader);
 
 		// Draw
 		glEnableVertexAttribArray(0);
-		vertexBuffer.bind(0, GL_ARRAY_BUFFER);
+		m_vertexBuffer.bind(0, GL_ARRAY_BUFFER);
 
-		glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.getCount() / 3);
+		glDrawArrays(GL_TRIANGLES, 0, m_vertexBuffer.getCount() / 3);
 		glDisableVertexAttribArray(0);
-
-		// Swap screen buffers
-		window.swapBuffers();
 	}
 
-	return 0;
+public:
+	~App1()
+	{
+		glDeleteProgram(m_shader);
+
+	}
+};
+
+int guardedMain(int argc, char** argv)
+{
+	App1 app;
+	return app.run();
 }
 
 int main(int argc, char **argv) {

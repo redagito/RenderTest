@@ -104,12 +104,6 @@ Window::Window(unsigned int width, unsigned int height, const char* title)
 	// Initial viewport is the entire window
 	glViewport(0, 0, width, height);
 
-	// Setup debug vallback
-	glEnable(GL_DEBUG_OUTPUT);
-	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-	glDebugMessageCallback(glDebugOutput, nullptr);
-	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
-
 }
 
 Window::~Window()

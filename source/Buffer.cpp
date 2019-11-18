@@ -2,7 +2,6 @@
 
 Buffer::Buffer()
 {
-	glCreateBuffers(1, &m_id);
 }
 
 Buffer::~Buffer()
@@ -12,6 +11,11 @@ Buffer::~Buffer()
 
 void Buffer::setData(const GLfloat* data, size_t count, GLenum usage)
 {
+	if (m_id == 0)
+	{
+		glCreateBuffers(1, &m_id);
+	}
+
 	m_size = count * sizeof(GLfloat);
 	m_elementSize = sizeof(GLfloat);
 	m_type = GL_FLOAT;
