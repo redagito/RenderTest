@@ -5,7 +5,6 @@
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
@@ -31,9 +30,10 @@
 *.out
 *.app
 
-# In souce build support
+# In source build support
 # Visual studio project files
 Debug/
+Release/
 x64/
 *.vcxproj
 *.vcxproj.filters

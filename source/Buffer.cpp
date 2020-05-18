@@ -1,40 +1,42 @@
 #include "Buffer.h"
 
-Buffer::Buffer()
-{
-}
+#include <stdexcept>
 
 Buffer::~Buffer()
 {
-	glDeleteBuffers(1, &m_id);
+    if (m_id == 0)
+        return;
+    glDeleteBuffers(1, &m_id);
 }
 
-void Buffer::setData(const GLfloat* data, size_t count, GLenum usage)
+void Buffer::setData(const GLfloat* data, size_t componentsPerElement, size_t elementCount, GLbitfield usageFlags)
 {
-	if (m_id == 0)
-	{
-		glCreateBuffers(1, &m_id);
-	}
+    if (data == nullptr)
+        throw std::runtime_error{"data is null"};
+    if (componentsPerElement < 1 || componentsPerElement > 4)
+        throw std::runtime_error{"Invalid components per element value"};
 
-	m_size = count * sizeof(GLfloat);
-	m_elementSize = sizeof(GLfloat);
-	m_type = GL_FLOAT;
+    if (m_id == 0)
+    {
+        glCreateBuffers(1, &m_id);
+    }
 
-	glNamedBufferStorage(m_id, m_size, data, usage);
+    m_componentsPerElement = componentsPerElement;
+    m_componentSize = sizeof(GLfloat);
+    m_elementCount = elementCount;
+    m_type = GL_FLOAT;
+
+    // Actual size of the data in bytes
+    size_t dataSize = m_elementCount * componentsPerElement * m_componentSize;
+    // Immutable storage
+    // Use glBufferData for mutable storage
+    glNamedBufferStorage(m_id, dataSize, data, usageFlags);
 }
 
 void Buffer::bind(GLuint index, GLenum target)
 {
-	glBindBuffer(target, m_id);
-	glVertexAttribPointer(index, m_size / m_elementSize / 3, m_type, GL_FALSE, 0, nullptr);
+    glBindBuffer(target, m_id);
+    glVertexAttribPointer(index, m_componentsPerElement, m_type, GL_FALSE, 0, nullptr);
 }
 
-size_t Buffer::getSize() const
-{
-	return m_size;
-}
-
-size_t Buffer::getCount() const
-{
-	return m_size / m_elementSize;
-}
+size_t Buffer::getElementCount() const { return m_elementCount; }
