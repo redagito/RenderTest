@@ -1,8 +1,11 @@
 #include <iostream>
 
+#include "app/HelloTriangle.h"
+#include "app/ModelLoad.h"
+
 int guardedMain(int argc, char** argv)
 {
-    App1 app;
+    HelloTriangle app;
     return app.run();
 }
 

@@ -1,32 +1,33 @@
 #pragma once
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 class Window
 {
-public:
-	Window(unsigned int width, unsigned int height, const char* title);
-	~Window();
+   public:
+    Window(unsigned int width, unsigned int height, const char* title);
+    ~Window();
 
-	using KeyCallback = void (*)(Window&, int, int, int, int);
+    using KeyCallback = void (*)(Window&, int, int, int, int);
 
-	void swapBuffers();
+    void swapBuffers();
 
-	void setVSync(bool sync);
+    void setVSync(bool sync);
 
-	void pollEvents();
+    void pollEvents();
 
-	void close();
+    void close();
 
-	void setKeyCallback(const KeyCallback& callback);
+    void setKeyCallback(const KeyCallback& callback);
 
-	bool isOpen() const;
+    bool isOpen() const;
 
-	int getKey(int code) const;
-private:
-	KeyCallback m_keyCallback;
-	GLFWwindow* m_window;
+    int getKey(int code) const;
 
-	static Window* s_window;
+   private:
+    KeyCallback m_keyCallback = nullptr;
+    GLFWwindow* m_window = nullptr;
+
+    static Window* s_window;
 };

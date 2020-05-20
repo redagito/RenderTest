@@ -42,7 +42,8 @@ void Mesh::draw(Shader& shader) const
         // Bind textures to shader
         // Set sampler to texture unit
         auto uniformName = "material." + name + number;
-        glUniform1i(glGetUniformLocation(shader.id, uniformName.c_str()), i);
+
+        shader.set(uniformName, i);
         // Bind texture to index
         glBindTexture(GL_TEXTURE_2D, textures.at(i).id);
     }

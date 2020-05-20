@@ -27,7 +27,7 @@ GLuint textureFromFile(const std::string& fileName, const std::string& directory
 
 Model::Model(const std::string& path) { loadModel(path); }
 
-void Model::draw(Shader& shader)
+void Model::draw(Shader& shader) const
 {
     // Draw each mesh
     // TODO Camera for culling?

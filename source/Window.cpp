@@ -131,6 +131,9 @@ Window::Window(unsigned int width, unsigned int height, const char* title)
     // Set active context
     glfwMakeContextCurrent(m_window);
 
+    glfwSetFramebufferSizeCallback(m_window,
+                                   [](GLFWwindow* window, int width, int height) { glViewport(0, 0, width, height); });
+
     // Load opengl functions
     if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == 0)
     {
