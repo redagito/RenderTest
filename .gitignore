@@ -59,3 +59,7 @@ conaninfo.txt
 # Conan lock and build graph
 conan.lock
 graph_info.json
+
+# Imgui
+imgui.ini
+imgui_log.txt

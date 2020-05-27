@@ -59,8 +59,11 @@ void Mesh::draw(Shader& shader) const
 
 void Mesh::setup()
 {
+    // VAO Stores buffer states
     glGenVertexArrays(1, &vao);
+    // Per-vertex data buffer
     glGenBuffers(1, &vbo);
+    // Index buffer
     glGenBuffers(1, &ebo);
 
     glBindVertexArray(vao);
@@ -82,16 +85,25 @@ void Mesh::setup()
     // All values are float
     // Vertices at index 0
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
 
     // Normals at index 1, requires offset
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)offsetof(Vertex, normal));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 
     // Texture coordinates at index 2, requires offset
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)offsetof(Vertex, texCoords));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
 
     // Disable vao
     glBindVertexArray(0);
 }
+
+// |x y z u  v| x  y  z  u  v |x  y  z  u  v
+//  1 2 3 4  5  6  7  8  9  10 11 12 13 14 15
+//  0 4 8 12 16 20 24 28 32 36 40 44 48 52 56
+// xyz - attribute 1, 3 * 4 bytes = 12 byte, offset 0
+// uv - attribute 2, 2 * 4 byte = 8 byte, offset 3 * 4 = 12
+// xyzuv - attribute block, 5 * 4 = 20 byte = stride
+// position of attribute element at index i = offset + stride * i
+// Example: attribute uv, index 2 position in buffer = 12 + 20 * 2 = 48 bytes from start

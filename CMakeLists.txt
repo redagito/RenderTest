@@ -24,6 +24,7 @@ conan_cmake_run(REQUIRES
 	assimp/5.0.1
 	
 	bullet3/2.89
+	imgui/1.76 
 	lua/5.3.5
 	sol2/2.20.6
 	
@@ -66,6 +67,7 @@ target_link_libraries(${PROJECT_NAME}
 	PRIVATE CONAN_PKG::assimp
 	
 	PRIVATE CONAN_PKG::bullet3
+	PRIVATE CONAN_PKG::imgui
 	PRIVATE CONAN_PKG::lua
 	PRIVATE CONAN_PKG::sol2
 )

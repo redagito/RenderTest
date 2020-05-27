@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "app/HelloTriangle.h"
+#include "app/ImguiDemo.h"
 #include "app/ModelLoad.h"
 
 int guardedMain(int argc, char** argv)
