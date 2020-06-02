@@ -17,28 +17,55 @@ Shader::~Shader()
 
 void Shader::setActive() const { glUseProgram(id); }
 
-void Shader::set(const std::string& name, const int value) { glUniform1i(getUniformLocation(name), value); }
-
-void Shader::set(const std::string& name, const unsigned int value) { glUniform1ui(getUniformLocation(name), value); }
-
-void Shader::set(const std::string& name, const float value) { glUniform1f(getUniformLocation(name), value); }
-
-void Shader::set(const std::string& name, const glm::vec2& value)
+void Shader::set(const std::string& name, const int value, bool required)
 {
-    glUniform2f(getUniformLocation(name), value.x, value.y);
+    auto loc = getUniformLocation(name, required);
+    if (loc < 0)
+        return;
+    glUniform1i(loc, value);
 }
 
-void Shader::set(const std::string& name, const glm::vec3& value)
+void Shader::set(const std::string& name, const unsigned int value, bool required)
 {
-    glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
+    auto loc = getUniformLocation(name, required);
+    if (loc < 0)
+        return;
+    glUniform1ui(loc, value);
 }
 
-void Shader::set(const std::string& name, const glm::vec4& value)
+void Shader::set(const std::string& name, const float value, bool required)
 {
-    glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
+    auto loc = getUniformLocation(name, required);
+    if (loc < 0)
+        return;
+    glUniform1f(loc, value);
 }
 
-int Shader::getUniformLocation(const std::string& name) const
+void Shader::set(const std::string& name, const glm::vec2& value, bool required)
+{
+    auto loc = getUniformLocation(name, required);
+    if (loc < 0)
+        return;
+    glUniform2f(loc, value.x, value.y);
+}
+
+void Shader::set(const std::string& name, const glm::vec3& value, bool required)
+{
+    auto loc = getUniformLocation(name, required);
+    if (loc < 0)
+        return;
+    glUniform3f(loc, value.x, value.y, value.z);
+}
+
+void Shader::set(const std::string& name, const glm::vec4& value, bool required)
+{
+    auto loc = getUniformLocation(name, required);
+    if (loc < 0)
+        return;
+    glUniform4f(loc, value.x, value.y, value.z, value.w);
+}
+
+int Shader::getUniformLocation(const std::string& name, bool required) const
 {
     auto iter = uniformLocations.find(name);
     if (iter != uniformLocations.end())
@@ -46,8 +73,11 @@ int Shader::getUniformLocation(const std::string& name) const
         return iter->second;
     }
     int index = glGetUniformLocation(id, name.c_str());
-    if (index < 0)
+
+    // Error if not found?
+    if (index < 0 && required)
         throw std::runtime_error{"Uniform does not exist: " + name};
+
     uniformLocations[name] = index;
     return index;
 }

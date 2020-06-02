@@ -10,9 +10,9 @@
 #include "Mesh.h"
 #include "Shader.h"
 
-// Texture loading
-GLuint textureFromFile(const std::string& fileName, const std::string& directory);
-
+/**
+ * Basically a collection of meshes
+ */
 class Model
 {
    public:

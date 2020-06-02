@@ -37,7 +37,4 @@ class ModelLoad : public RenderApplication
             model.draw(*shader);
         }
     }
-
-   public:
-    ~ModelLoad() {}
 };

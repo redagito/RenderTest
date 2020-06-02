@@ -14,15 +14,15 @@ class Shader
 
     void setActive() const;
 
-    void set(const std::string& name, const int value);
-    void set(const std::string& name, const unsigned int value);
-    void set(const std::string& name, const float value);
-    void set(const std::string& name, const glm::vec2& value);
-    void set(const std::string& name, const glm::vec3& value);
-    void set(const std::string& name, const glm::vec4& value);
+    void set(const std::string& name, const int value, bool required = false);
+    void set(const std::string& name, const unsigned int value, bool required = false);
+    void set(const std::string& name, const float value, bool required = false);
+    void set(const std::string& name, const glm::vec2& value, bool required = false);
+    void set(const std::string& name, const glm::vec3& value, bool required = false);
+    void set(const std::string& name, const glm::vec4& value, bool required = false);
 
    private:
-    int getUniformLocation(const std::string& name) const;
+    int getUniformLocation(const std::string& name, bool required) const;
 
     GLuint id = 0;
     mutable std::unordered_map<std::string, int> uniformLocations;

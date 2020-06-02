@@ -10,6 +10,13 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<GLuint>& indic
     setup();
 }
 
+Mesh::~Mesh()
+{
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ebo);
+}
+
 void Mesh::draw(Shader& shader) const
 {
     GLuint diffuseNr = 1;
@@ -53,7 +60,7 @@ void Mesh::draw(Shader& shader) const
 
     // Draw mesh
     glBindVertexArray(vao);
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
 }
 

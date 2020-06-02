@@ -76,5 +76,9 @@ void main(){
     }
 
    public:
-    ~HelloTriangle() {}
+    ~HelloTriangle()
+    {
+        glDeleteVertexArrays(1, &vertexArray);
+        glDeleteBuffers(1, &vertexBuffer);
+    }
 };

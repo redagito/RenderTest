@@ -1,12 +1,14 @@
 #include <iostream>
 
+#include "app/ColorTriangle.h"
 #include "app/HelloTriangle.h"
-#include "app/ImguiDemo.h"
-#include "app/ModelLoad.h"
+#include "app/TexturedTriangle.h"
+//#include "app/ImguiDemo.h"
+//#include "app/ModelLoad.h"
 
 int guardedMain(int argc, char** argv)
 {
-    HelloTriangle app;
+    ColorTriangle app;
     return app.run();
 }
 

@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Shader.h"
+#include "Texture.h"
 
 // Represents per-vertex data in model space
 struct Vertex
@@ -14,23 +15,6 @@ struct Vertex
     glm::vec3 position;
     glm::vec3 normal;
     glm::vec2 texCoords;
-};
-
-struct Texture
-{
-    enum class Type
-    {
-        Diffuse,
-        Specular,
-        Normal,
-        Height
-    };
-
-    GLuint id;
-    // Either "diffuse_texture" or "specular_texture"
-    // TODO Use enum
-    std::string type;
-    std::string fileName;
 };
 
 class Mesh
@@ -41,11 +25,16 @@ class Mesh
     std::vector<Texture> textures;
 
     Mesh(const std::vector<Vertex>& vertices, const std::vector<GLuint>& indices, const std::vector<Texture>& textures);
+    ~Mesh();
+
     void draw(Shader& shader) const;
 
    private:
+    // Vertex array object
     GLuint vao = 0;
+    // Vertex buffer, interleaved vertex data
     GLuint vbo = 0;
+    // Element buffer, index buffer for vbo
     GLuint ebo = 0;
 
     void setup();
