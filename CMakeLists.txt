@@ -77,5 +77,10 @@ target_include_directories(${PROJECT_NAME}
 	PRIVATE ${OPENGL_INCLUDE_DIR}
 )
 
+# Required for glm extensions
+target_compile_definitions(${PROJECT_NAME}
+	PRIVATE GLM_EXT_INCLUDED
+)
+
 # Copy runtime data
 file (COPY ${CMAKE_CURRENT_SOURCE_DIR}/data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

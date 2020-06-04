@@ -4,12 +4,13 @@
 #include "app/HelloTriangle.h"
 #include "app/TexturedQuad.h"
 #include "app/TexturedTriangle.h"
+#include "app/TransformedQuad.h"
 //#include "app/ImguiDemo.h"
 //#include "app/ModelLoad.h"
 
 int guardedMain(int argc, char** argv)
 {
-    TexturedQuad app;
+    TransformedQuad app;
     return app.run();
 }
 

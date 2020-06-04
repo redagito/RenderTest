@@ -20,6 +20,7 @@ class Shader
     void set(const std::string& name, const glm::vec2& value, bool required = false);
     void set(const std::string& name, const glm::vec3& value, bool required = false);
     void set(const std::string& name, const glm::vec4& value, bool required = false);
+    void set(const std::string& name, const glm::mat4& value, bool required = false);
 
    private:
     int getUniformLocation(const std::string& name, bool required) const;

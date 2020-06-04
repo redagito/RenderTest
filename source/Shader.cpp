@@ -1,5 +1,6 @@
 #include "Shader.h"
 
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <vector>
 
@@ -63,6 +64,14 @@ void Shader::set(const std::string& name, const glm::vec4& value, bool required)
     if (loc < 0)
         return;
     glUniform4f(loc, value.x, value.y, value.z, value.w);
+}
+
+void Shader::set(const std::string& name, const glm::mat4& value, bool required)
+{
+    auto loc = getUniformLocation(name, required);
+    if (loc < 0)
+        return;
+    glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
 }
 
 int Shader::getUniformLocation(const std::string& name, bool required) const
