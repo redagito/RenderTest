@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "app/ColorTriangle.h"
+#include "app/CubePerspective.h"
 #include "app/HelloPerspective.h"
 #include "app/HelloTriangle.h"
 #include "app/TexturedQuad.h"
@@ -11,7 +12,7 @@
 
 int guardedMain(int argc, char** argv)
 {
-    HelloPerspective app;
+    CubePerspective app;
     return app.run();
 }
 
