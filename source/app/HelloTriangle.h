@@ -66,13 +66,12 @@ void main(){
 
         // Draw
         glBindVertexArray(vertexArray);
-        glEnableVertexAttribArray(0);
 
         m_shader->setActive();
         m_shader->set("base_color", {0.f, 1.f, 1.f});
 
         glDrawArrays(GL_TRIANGLES, 0, 6);
-        glDisableVertexAttribArray(0);
+        glBindVertexArray(0);
     }
 
    public:

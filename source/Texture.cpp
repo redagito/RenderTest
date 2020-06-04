@@ -9,7 +9,7 @@ GLuint textureFromFile(const std::string& fileName, const std::string& directory
     // Load with soil2
     auto filePath = directory + "/" + fileName;
 
-    GLuint id = SOIL_load_OGL_texture(filePath.c_str(), 0, 0, 0);
+    GLuint id = SOIL_load_OGL_texture(filePath.c_str(), 4, 0, SOIL_FLAG_INVERT_Y);
     if (id == 0)
         throw std::runtime_error{"Failed to load texture " + filePath};
 
@@ -25,4 +25,13 @@ GLuint textureFromFile(const std::string& fileName, const std::string& directory
 
     glBindTexture(GL_TEXTURE_2D, 0);
     return id;
+}
+
+Texture::~Texture()
+{
+    if (id == 0)
+        return;
+
+    glDeleteTextures(1, &id);
+    id = 0;
 }

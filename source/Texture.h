@@ -7,8 +7,11 @@
 // Texture loading
 GLuint textureFromFile(const std::string& fileName, const std::string& directory);
 
-struct Texture
+class Texture
 {
+   public:
+    ~Texture();
+
     enum class Type
     {
         Diffuse,
@@ -17,7 +20,7 @@ struct Texture
         Height
     };
 
-    GLuint id;
+    GLuint id = 0;
     // Either "diffuse_texture" or "specular_texture"
     // TODO Use enum
     std::string type;

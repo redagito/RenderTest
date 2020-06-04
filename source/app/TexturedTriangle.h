@@ -100,7 +100,7 @@ void main(){
         // So this call is actually unnecessary
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glBindVertexArray(0);
     }
