@@ -6,12 +6,11 @@
 #include "Shader.h"
 #include "Texture.h"
 
-class TransformedQuad : public RenderApplication
+class HelloPerspective : public RenderApplication
 {
    private:
     std::unique_ptr<Shader> shader;
     Texture texContainer;
-    Texture texAwesome;
     GLuint vao = 0;
     GLuint vbo = 0;
 
@@ -25,31 +24,30 @@ layout (location = 1) in vec2 uv;
 
 out vec2 texCoord;
 
-uniform mat4 transform;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
 void main()
 {
 	texCoord = uv;
-	gl_Position = transform * vec4(vp_ndc, 0.f, 1.f);
+    // Matrix multiplication is read left to right
+	gl_Position = projection * view * model * vec4(vp_ndc, 0.f, 1.f);
 }
 )##";
 
         static const char* fragmentCode = R"##(
 #version 460 core
 
-uniform sampler2D baseTex;
-uniform sampler2D blendTex;
-uniform float mixRatio;
-
 in vec2 texCoord;
 
 out vec4 color;
 
+uniform sampler2D baseTex;
+
 void main()
 {
-	vec4 base = texture(baseTex, texCoord);
-	vec4 blend = texture(blendTex, texCoord);
-	color = mix(base, blend, mixRatio);
+	color = texture(baseTex, texCoord);
 }
 
 )##";
@@ -59,7 +57,6 @@ void main()
 
         // Texture
         texContainer.id = textureFromFile("container.jpg", "data/texture/");
-        texAwesome.id = textureFromFile("awesomeface.png", "data/texture/");
 
         // Vertex data, x/y, v/v
         const GLfloat vertexData[] = {// First triangle, upper right, upper left, lower left
@@ -90,9 +87,21 @@ void main()
 
     void render() override
     {
-        // Timer
         static float timeAcc = 0;
         timeAcc += getTimeDelta();
+
+        // Model matrix
+        glm::mat4 model{1.f};
+        // Rotation on x axis
+        model = glm::rotate(model, glm::radians(-55.f), {1.f, 0.f, 0.f});
+
+        // View matrix
+        glm::mat4 view{1.f};
+        view = glm::translate(view, {0.f, 0.f, -3.f});
+
+        // Projection
+        auto aspectRatio = (float)getWidth() / (float)getHeight();
+        glm::mat4 projection = glm::perspective(glm::radians(45.f), aspectRatio, 0.1f, 100.f);
 
         // Clear framebuffer
         glClear(GL_COLOR_BUFFER_BIT);
@@ -100,18 +109,10 @@ void main()
         // Use shader
         shader->setActive();
 
-        // Tranformation order: scale, rotate, translate
-        // With matrix denotation: T * R * S, applied in reverse order
-        glm::mat4 transform = glm::mat4{1.f};
-        // Translate on x axis
-        transform = glm::translate(transform, {std::sin(timeAcc * 1.5f), 0.f, 0.f});
-        // Rotate on Z axis, 10 degrees each second
-        transform = glm::rotate(transform, glm::radians(timeAcc * 10.f), {0.f, 0.f, 1.f});
-        // Scale on each axis
-        transform = glm::scale(transform, glm::vec3{(std::sin(timeAcc) + 1.f) / 2.f});
-
-        // Set transformation
-        shader->set("transform", transform);
+        // Transformation data for shader
+        shader->set("model", model);
+        shader->set("view", view);
+        shader->set("projection", projection);
 
         // Texture
         // Activate the binding location
@@ -121,21 +122,13 @@ void main()
         // Set texture location manually
         shader->set("baseTex", 0);
 
-        // Face texture
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texAwesome.id);
-        shader->set("blendTex", 1);
-
-        // Mix ratio
-        shader->set("mixRatio", (std::sin(timeAcc * 3.f) + 1.f) / 2.f);
-
         glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
     }
 
    public:
-    ~TransformedQuad()
+    ~HelloPerspective()
     {
         glDeleteVertexArrays(1, &vao);
         glDeleteBuffers(1, &vbo);

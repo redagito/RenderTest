@@ -47,3 +47,7 @@ int RenderApplication::run()
 }
 
 float RenderApplication::getTimeDelta() const { return dtime; }
+
+unsigned int RenderApplication::getWidth() const { return m_window->getWidth(); }
+
+unsigned int RenderApplication::getHeight() const { return m_window->getHeight(); }

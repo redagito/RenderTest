@@ -87,6 +87,7 @@ static void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum
         break;
     case GL_DEBUG_SEVERITY_NOTIFICATION:
         std::cout << "Severity: notification";
+
         break;
     }
     std::cout << std::endl;
@@ -94,7 +95,7 @@ static void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum
 
 Window* Window::s_window = nullptr;
 
-Window::Window(unsigned int width, unsigned int height, const char* title)
+Window::Window(unsigned int width, unsigned int height, const char* title) : m_width(width), m_height(height)
 {
     if (s_window != nullptr)
     {
@@ -137,8 +138,12 @@ Window::Window(unsigned int width, unsigned int height, const char* title)
     // Set active context
     glfwMakeContextCurrent(m_window);
 
-    glfwSetFramebufferSizeCallback(m_window,
-                                   [](GLFWwindow* window, int width, int height) { glViewport(0, 0, width, height); });
+    glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
+        if (Window::s_window == nullptr)
+            return;
+        glViewport(0, 0, width, height);
+        Window::s_window->onResize(width, height);
+    });
 
     // Load opengl functions
     if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == 0)
@@ -233,3 +238,12 @@ void Window::setKeyCallback(const KeyCallback& callback) { m_keyCallback = callb
 bool Window::isOpen() const { return glfwWindowShouldClose(m_window) == GLFW_FALSE; }
 
 int Window::getKey(int code) const { return glfwGetKey(m_window, code); }
+
+unsigned int Window::getWidth() const { return m_width; }
+unsigned int Window::getHeight() const { return m_height; }
+
+void Window::onResize(unsigned int width, unsigned int height)
+{
+    m_width = width;
+    m_height = height;
+}
