@@ -59,6 +59,7 @@ class CubePerspective : public RenderApplication
    private:
     std::unique_ptr<Shader> shader;
     Texture texContainer;
+    Texture texAwesome;
     GLuint vao = 0;
     GLuint vbo = 0;
 
@@ -92,10 +93,15 @@ in vec2 texCoord;
 out vec4 color;
 
 uniform sampler2D baseTex;
+uniform sampler2D blendTex;
+uniform float mixRatio;
 
 void main()
 {
-	color = texture(baseTex, texCoord);
+	color = mix(
+        texture(baseTex, texCoord), 
+        texture(blendTex, texCoord), 
+        clamp(mixRatio, 0.2, 0.8));
 }
 
 )##";
@@ -105,6 +111,7 @@ void main()
 
         // Texture
         texContainer.id = textureFromFile("wall.jpg", "data/texture/");
+        texAwesome.id = textureFromFile("awesomeface.png", "data/texture/");
 
         glCreateBuffers(1, &vbo);
         glNamedBufferData(vbo, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
@@ -121,8 +128,10 @@ void main()
 
         glBindVertexArray(0);
 
-        // Clear color buffer
+        // Set render state
+
         glClearColor(0.2f, 0.3f, 0.3f, 1.f);
+        glEnable(GL_DEPTH_TEST);
 
         return true;
     }
@@ -146,7 +155,7 @@ void main()
         glm::mat4 projection = glm::perspective(glm::radians(45.f), aspectRatio, 0.1f, 100.f);
 
         // Clear framebuffer
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Use shader
         shader->setActive();
@@ -164,9 +173,17 @@ void main()
         // Set texture location manually
         shader->set("baseTex", 0);
 
+        // Blend texture
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texAwesome.id);
+        shader->set("blendTex", 1);
+
+        // Mix ratio
+        shader->set("mixRatio", (std::sin(timeAcc * 3) + 1.f) / 2.f);
+
         glBindVertexArray(vao);
         auto vertexCount = sizeof(cubeVertices) / sizeof(GLfloat) / 5;
-        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertexCount));
         glBindVertexArray(0);
     }
 
