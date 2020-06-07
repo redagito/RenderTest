@@ -9,4 +9,7 @@ class ImguiDemo : public RenderApplication
     bool setup() override;
 
     void render() override;
+
+   public:
+    ~ImguiDemo();
 };

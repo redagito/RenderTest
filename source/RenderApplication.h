@@ -18,8 +18,8 @@ class RenderApplication
    protected:
     // Delta time in seconds
     float getTimeDelta() const;
-    unsigned int getWidth() const;
-    unsigned int getHeight() const;
+
+    const Window& getWindow() const;
 
    private:
     std::shared_ptr<Window> m_window;

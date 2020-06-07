@@ -26,6 +26,8 @@ class Window
 
     int getKey(int code) const;
 
+    GLFWwindow* getGLFWWindow() const;
+
     unsigned int getWidth() const;
     unsigned int getHeight() const;
 

@@ -139,7 +139,7 @@ void CubePerspective::render()
     view = glm::translate(view, {0.f, 0.f, -3.f});
 
     // Projection
-    auto aspectRatio = (float)getWidth() / (float)getHeight();
+    auto aspectRatio = (float)getWindow().getWidth() / (float)getWindow().getHeight();
     glm::mat4 projection = glm::perspective(glm::radians(45.f), aspectRatio, 0.1f, 100.f);
 
     // Clear framebuffer

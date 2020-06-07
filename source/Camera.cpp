@@ -28,4 +28,8 @@ void Camera::setUp(const glm::vec3& up)
     view = glm::lookAt(position, target, up);
 }
 
+const glm::vec3& Camera::getPosition() const { return position; }
+
+const glm::vec3& Camera::getUp() const { return up; }
+
 const glm::mat4& Camera::getView() const { return view; }

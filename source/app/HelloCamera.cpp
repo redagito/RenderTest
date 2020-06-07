@@ -132,7 +132,7 @@ void HelloCamera::render()
     camera.setPosition({camX, 0.f, camZ});
 
     // Projection
-    auto aspectRatio = (float)getWidth() / (float)getHeight();
+    auto aspectRatio = (float)getWindow().getWidth() / (float)getWindow().getHeight();
     glm::mat4 projection = glm::perspective(glm::radians(45.f), aspectRatio, 0.1f, 100.f);
 
     // Clear framebuffer

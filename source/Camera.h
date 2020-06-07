@@ -10,6 +10,9 @@ class Camera
     void setTarget(const glm::vec3& target);
     void setUp(const glm::vec3& up);
 
+    const glm::vec3& getPosition() const;
+    const glm::vec3& getUp() const;
+
     const glm::mat4& getView() const;
 
    private:
