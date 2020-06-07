@@ -1,7 +1,6 @@
 # RenderTest
 
 > The GL in OpenGL stands for "Good Luck" because you are going to need it.
-> - Anonymous
 
 Educational project to explore modern (4.6+) OpenGL and general rendering techniques.
 
