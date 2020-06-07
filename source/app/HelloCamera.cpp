@@ -126,7 +126,7 @@ void HelloCamera::render()
     timeAcc += getTimeDelta();
 
     // Camera movement, circle around 0/0/0 on x/z plane
-    const float radius = 5.f;
+    const float radius = 10.f;
     float camX = std::sin(timeAcc) * radius;
     float camZ = std::cos(timeAcc) * radius;
     camera.setPosition({camX, 0.f, camZ});
@@ -152,16 +152,23 @@ void HelloCamera::render()
     // Set texture location manually
     shader->set("baseTex", 0);
 
-    // Model matrix
-    glm::mat4 model{1.f};
-    model = glm::translate(model, {0.f, 0.f, 0.f});
-    model = glm::rotate(model, glm::radians(timeAcc * (5.f)), {1.f, 0.3f, 0.7f});
-
-    // Transformation data for shader
-    shader->set("model", model);
+    glm::vec3 positions[] = {{0.f, 0.f, 0.f},  {2.f, 0.f, 0.f}, {0.f, -2.f, 0.f},
+                             {0.f, 2.f, -2.f}, {0.f, 0.f, 2.f}, {3.f, -3.f, 2.f}};
 
     auto vertexCount = sizeof(cubeVertices) / sizeof(GLfloat) / 5;
-    glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertexCount));
+
+    // Draw cubes
+    for (const auto position : positions)
+    {
+        // Model matrix
+        glm::mat4 model{1.f};
+        model = glm::translate(model, position);
+        model = glm::rotate(model, glm::radians(timeAcc * (50.f)), {1.f, 0.3f, 0.7f});
+
+        // Transformation data for shader
+        shader->set("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertexCount));
+    }
     glBindVertexArray(0);
 }
 
