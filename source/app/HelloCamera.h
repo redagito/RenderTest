@@ -1,15 +1,16 @@
 #pragma once
 
+#include "Camera.h"
 #include "RenderApplication.h"
 #include "Shader.h"
 #include "Texture.h"
 
-class CubePerspective : public RenderApplication
+class HelloCamera : public RenderApplication
 {
    private:
     std::unique_ptr<Shader> shader;
     Texture texContainer;
-    Texture texAwesome;
+    Camera camera;
     GLuint vao = 0;
     GLuint vbo = 0;
 
@@ -18,5 +19,5 @@ class CubePerspective : public RenderApplication
     void render() override;
 
    public:
-    ~CubePerspective();
+    ~HelloCamera();
 };

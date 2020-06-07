@@ -4,7 +4,7 @@
 #include "Shader.h"
 #include "Texture.h"
 
-class CubePerspective : public RenderApplication
+class RotatingCubes : public RenderApplication
 {
    private:
     std::unique_ptr<Shader> shader;
@@ -18,5 +18,5 @@ class CubePerspective : public RenderApplication
     void render() override;
 
    public:
-    ~CubePerspective();
+    ~RotatingCubes();
 };

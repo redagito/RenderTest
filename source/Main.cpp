@@ -1,18 +1,10 @@
 #include <iostream>
 
-#include "app/ColorTriangle.h"
-#include "app/CubePerspective.h"
-#include "app/HelloPerspective.h"
-#include "app/HelloTriangle.h"
-#include "app/TexturedQuad.h"
-#include "app/TexturedTriangle.h"
-#include "app/TransformedQuad.h"
-//#include "app/ImguiDemo.h"
-//#include "app/ModelLoad.h"
+#include "app/HelloCamera.h"
 
 int guardedMain(int argc, char** argv)
 {
-    CubePerspective app;
+    HelloCamera app;
     return app.run();
 }
 
