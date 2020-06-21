@@ -15,6 +15,7 @@ Based on the following tutorials
 * https://antongerdelan.net/opengl
 * http://www.mbsoftworks.sk/tutorials
 * http://duriansoftware.com/joe/An-intro-to-modern-OpenGL.-Table-of-Contents.html
+* https://www.rastertek.com/tutdx11s2ter.html - Actually DirectX11 but the terrain tutorial looks interesting
 
 ## Requirements
 
@@ -40,3 +41,5 @@ make
 ```
 
 ## Screenshots
+
+![Look Around Camera](https://github.com/redagito/RenderTest/blob/master/doc/screen1_lookaroundcamera.png)

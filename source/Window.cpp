@@ -266,8 +266,4 @@ void Window::onCursorMove(double x, double y)
     m_cursorPosition = position;
 }
 
-void Window::onScroll(double xOffset, double yOffset)
-{
-    m_scrollOffset.x = xOffset;
-    m_scrollOffset.y = yOffset;
-}
+void Window::onScroll(double xOffset, double yOffset) { m_scrollOffset = glm::vec2{xOffset, yOffset}; }

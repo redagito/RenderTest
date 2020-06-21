@@ -133,7 +133,8 @@ void LookAroundCamera::render()
     auto offset = getWindow().getCursorMovement();
     const auto sensitivity = 1.0f;
     offset *= sensitivity * getTimeDelta();
-    yaw += offset.x;
+    // Prevent losing precision by constraining yaw values
+    yaw = glm::mod(yaw + offset.x, 360.f);
     pitch += offset.y;
 
     // Camera constraints
