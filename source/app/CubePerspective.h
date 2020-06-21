@@ -4,6 +4,9 @@
 #include "Shader.h"
 #include "Texture.h"
 
+/**
+ * Display cube with perspective camera
+ */
 class CubePerspective : public RenderApplication
 {
    private:

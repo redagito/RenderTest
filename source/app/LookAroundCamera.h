@@ -5,12 +5,21 @@
 #include "Shader.h"
 #include "Texture.h"
 
-class SimpleMoveCamera : public RenderApplication
+/**
+ * Mouse controlled camera that can look around
+ */
+class LookAroundCamera : public RenderApplication
 {
    private:
     std::unique_ptr<Shader> shader;
     Texture texContainer;
     Camera camera;
+    // Camera view direction
+    // Left / right rotation
+    float yaw = -90.f;
+    // Up / down rotation
+    float pitch = 0.f;
+
     GLuint vao = 0;
     GLuint vbo = 0;
 
@@ -19,5 +28,5 @@ class SimpleMoveCamera : public RenderApplication
     void render() override;
 
    public:
-    ~SimpleMoveCamera();
+    ~LookAroundCamera();
 };

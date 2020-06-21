@@ -5,7 +5,9 @@
 #include "RenderApplication.h"
 #include "Shader.h"
 
-// Displays 2 triangles
+/**
+ * Display 2 colored triangles
+ */
 class ColorTriangle : public RenderApplication
 {
    private:

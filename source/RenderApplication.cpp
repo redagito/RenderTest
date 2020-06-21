@@ -11,6 +11,10 @@ RenderApplication::RenderApplication()
         {
             w.close();
         }
+        if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
+        {
+            w.setCursorCapture(!w.getCursorCapture());
+        }
     });
 }
 

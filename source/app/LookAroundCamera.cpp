@@ -1,4 +1,4 @@
-#include "app/SimpleMoveCamera.h"
+#include "app/LookAroundCamera.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -50,7 +50,7 @@ static const float cubeVertices[] = {
 };
 // clang-format on
 
-bool SimpleMoveCamera::setup()
+bool LookAroundCamera::setup()
 {
     static const char* vertexCode = R"##(
 #version 460 core
@@ -92,8 +92,8 @@ void main()
     shader = std::make_unique<Shader>(vertexCode, fragmentCode);
 
     // Camera
+    glm::vec3 position{0.f, 0.f, 5.f};
     camera.setPosition({0.f, 0.f, 5.f});
-    // Look into negative z
     camera.setDirection({0.f, 0.f, -1.f});
     camera.setUp({0.f, 1.f, 0.f});
 
@@ -123,19 +123,34 @@ void main()
     return true;
 }
 
-void SimpleMoveCamera::render()
+void LookAroundCamera::render()
 {
     static float timeAcc = 0;
     timeAcc += getTimeDelta();
 
-    // Camera parameters
-    float cameraSpeed = 2.f * getTimeDelta();
+    // Camera view direction
+    // Cursor offset
+    auto offset = getWindow().getCursorMovement();
+    const auto sensitivity = 1.0f;
+    offset *= sensitivity * getTimeDelta();
+    yaw += offset.x;
+    pitch += offset.y;
 
-    glm::vec3 position = camera.getPosition();
-    auto direction = camera.getDirection();
-    auto right = camera.getRight();
+    // Camera constraints
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    else if (pitch < -89.0f)
+        pitch = -89.0f;
+
+    // Calculates front vector
+    camera.setDirection(yaw, pitch);
 
     // Process input for camera movement
+    auto direction = camera.getDirection();
+    float cameraSpeed = 2.f * getTimeDelta();
+    glm::vec3 position = camera.getPosition();
+    glm::vec3 right = camera.getRight();
+
     // Forwards, backward
     if (getWindow().getKey(GLFW_KEY_W) == GLFW_PRESS)
         position += direction * cameraSpeed;
@@ -189,7 +204,7 @@ void SimpleMoveCamera::render()
     glBindVertexArray(0);
 }
 
-SimpleMoveCamera::~SimpleMoveCamera()
+LookAroundCamera::~LookAroundCamera()
 {
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);

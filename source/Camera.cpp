@@ -2,34 +2,47 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-void Camera::setLookAt(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up)
-{
-    this->position = position;
-    this->target = target;
-    this->up = up;
-    view = glm::lookAt(position, target, up);
-}
-
 void Camera::setPosition(const glm::vec3& position)
 {
     this->position = position;
-    view = glm::lookAt(position, target, up);
+    viewDirty = true;
 }
 
-void Camera::setTarget(const glm::vec3& target)
+void Camera::setDirection(const glm::vec3& direction)
 {
-    this->target = target;
-    view = glm::lookAt(position, target, up);
+    this->direction = direction;
+    viewDirty = true;
+}
+
+void Camera::setDirection(const float yaw, const float pitch)
+{
+    glm::vec3 direction;
+    direction.x = std::cos(glm::radians(yaw)) * std::cos(glm::radians(pitch));
+    direction.y = std::sin(glm::radians(pitch));
+    direction.z = std::sin(glm::radians(yaw)) * std::cos(glm::radians(pitch));
+    setDirection(direction);
 }
 
 void Camera::setUp(const glm::vec3& up)
 {
     this->up = up;
-    view = glm::lookAt(position, target, up);
+    viewDirty = true;
 }
 
 const glm::vec3& Camera::getPosition() const { return position; }
 
+const glm::vec3& Camera::getDirection() const { return direction; }
+
 const glm::vec3& Camera::getUp() const { return up; }
 
-const glm::mat4& Camera::getView() const { return view; }
+const glm::vec3 Camera::getRight() const { return glm::normalize(glm::cross(direction, up)); }
+
+const glm::mat4& Camera::getView() const
+{
+    if (viewDirty)
+    {
+        viewDirty = false;
+        view = glm::lookAt(position, position + direction, up);
+    }
+    return view;
+}

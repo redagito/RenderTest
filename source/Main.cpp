@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "app/SimpleMoveCamera.h"
+#include "app/LookAroundCamera.h"
 
 int guardedMain(int argc, char** argv)
 {
-    SimpleMoveCamera app;
+    LookAroundCamera app;
     return app.run();
 }
 

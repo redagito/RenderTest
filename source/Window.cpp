@@ -129,6 +129,13 @@ Window::Window(unsigned int width, unsigned int height, const char* title) : m_w
         Window::s_window->m_keyCallback(*Window::s_window, key, code, action, mods);
     });
 
+    // Mouse move callback
+    glfwSetCursorPosCallback(m_window, [](GLFWwindow* w, double x, double y) {
+        if (Window::s_window == nullptr)
+            return;
+        Window::s_window->onCursorMove(x, y);
+    });
+
     // Set active context
     glfwMakeContextCurrent(m_window);
 
@@ -184,7 +191,13 @@ void Window::setVSync(bool sync)
     }
 }
 
-void Window::pollEvents() { glfwPollEvents(); }
+void Window::pollEvents()
+{
+    // Reset
+    m_cursorMovement = glm::vec2{0.f};
+
+    glfwPollEvents();
+}
 
 void Window::close() { glfwSetWindowShouldClose(m_window, GLFW_TRUE); }
 
@@ -193,6 +206,26 @@ void Window::setKeyCallback(const KeyCallback& callback) { m_keyCallback = callb
 bool Window::isOpen() const { return glfwWindowShouldClose(m_window) == GLFW_FALSE; }
 
 int Window::getKey(int code) const { return glfwGetKey(m_window, code); }
+
+glm::vec2 Window::getCursorMovement() const { return m_cursorMovement; }
+
+void Window::setCursorCapture(bool capture)
+{
+    if (m_cursorCaptured == capture)
+        return;
+
+    m_cursorCaptured = capture;
+    if (capture)
+    {
+        glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+    else
+    {
+        glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+}
+
+bool Window::getCursorCapture() const { return m_cursorCaptured; }
 
 GLFWwindow* Window::getGLFWWindow() const { return m_window; }
 
@@ -203,4 +236,21 @@ void Window::onResize(unsigned int width, unsigned int height)
 {
     m_width = width;
     m_height = height;
+}
+
+void Window::onCursorMove(double x, double y)
+{
+    auto position = glm::vec2{x, y};
+    // Prevent huge movement delta on initial call
+    if (m_firstCursorMove)
+    {
+        m_firstCursorMove = false;
+    }
+    else
+    {
+        m_cursorMovement = position - m_cursorPosition;
+        // Inverted due to different axis directions
+        m_cursorMovement.y = -m_cursorMovement.y;
+    }
+    m_cursorPosition = position;
 }

@@ -5,23 +5,35 @@
 class Camera
 {
    public:
-    void setLookAt(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up);
+    // Camera position in world space
     void setPosition(const glm::vec3& position);
-    void setTarget(const glm::vec3& target);
+    // Camera direction vector
+    void setDirection(const glm::vec3& direction);
+    // Camera direction from yaw and pitch
+    void setDirection(const float yaw, const float pitch);
+    // Up vector
     void setUp(const glm::vec3& up);
 
     const glm::vec3& getPosition() const;
+    const glm::vec3& getDirection() const;
     const glm::vec3& getUp() const;
 
+    // Utility
+    // Normalized right vector
+    const glm::vec3 getRight() const;
+
+    // View matrix
     const glm::mat4& getView() const;
 
    private:
     // Position in world space
     glm::vec3 position = glm::vec3{0.f, 0.f, 0.f};
-    // Target position in world space
-    glm::vec3 target = glm::vec3{0.f, 0.f, -1.f};
+    // Camera direction in world space
+    glm::vec3 direction = glm::vec3{0.f, 0.f, -1.f};
     // Camera up vector
     glm::vec3 up = glm::vec3{0.f, 1.f, 0.f};
-    // View matrix
-    glm::mat4 view;
+
+    // View matrix, recalculated on access
+    mutable bool viewDirty = true;
+    mutable glm::mat4 view;
 };

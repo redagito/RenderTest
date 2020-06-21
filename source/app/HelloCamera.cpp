@@ -92,7 +92,9 @@ void main()
     shader = std::make_unique<Shader>(vertexCode, fragmentCode);
 
     // Camera
-    camera.setLookAt({0.f, 0.f, 5.f}, {0.f, 0.f, 0.f}, {0.f, 1.f, 0.f});
+    camera.setPosition({0.f, 0.f, 5.f});
+    camera.setDirection({0.f, 0.f, -1.f});
+    camera.setUp({0.f, 1.f, 0.f});
 
     // Texture
     texContainer.id = textureFromFile("container.jpg", "data/texture/");
