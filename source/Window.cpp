@@ -136,6 +136,13 @@ Window::Window(unsigned int width, unsigned int height, const char* title) : m_w
         Window::s_window->onCursorMove(x, y);
     });
 
+    // Scrolling callback
+    glfwSetScrollCallback(m_window, [](GLFWwindow* w, double xOffset, double yOffset) {
+        if (Window::s_window == nullptr)
+            return;
+        Window::s_window->onScroll(xOffset, yOffset);
+    });
+
     // Set active context
     glfwMakeContextCurrent(m_window);
 
@@ -193,9 +200,11 @@ void Window::setVSync(bool sync)
 
 void Window::pollEvents()
 {
-    // Reset
+    // Reset offsets
     m_cursorMovement = glm::vec2{0.f};
+    m_scrollOffset = glm::vec2{0.f};
 
+    // Poll for events, triggers callbacks
     glfwPollEvents();
 }
 
@@ -207,7 +216,9 @@ bool Window::isOpen() const { return glfwWindowShouldClose(m_window) == GLFW_FAL
 
 int Window::getKey(int code) const { return glfwGetKey(m_window, code); }
 
-glm::vec2 Window::getCursorMovement() const { return m_cursorMovement; }
+const glm::vec2& Window::getCursorMovement() const { return m_cursorMovement; }
+
+const glm::vec2& Window::getScrollOffset() const { return m_scrollOffset; }
 
 void Window::setCursorCapture(bool capture)
 {
@@ -253,4 +264,10 @@ void Window::onCursorMove(double x, double y)
         m_cursorMovement.y = -m_cursorMovement.y;
     }
     m_cursorPosition = position;
+}
+
+void Window::onScroll(double xOffset, double yOffset)
+{
+    m_scrollOffset.x = xOffset;
+    m_scrollOffset.y = yOffset;
 }

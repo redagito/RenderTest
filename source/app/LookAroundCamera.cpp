@@ -164,9 +164,18 @@ void LookAroundCamera::render()
 
     camera.setPosition(position);
 
+    // Zoom effect
+    // Scrolling y direction changes fov
+    fov -= getWindow().getScrollOffset().y;
+    // Constraints
+    if (fov > 60.f)
+        fov = 60.f;
+    else if (fov < 1.f)
+        fov = 1.f;
+
     // Projection
     auto aspectRatio = (float)getWindow().getWidth() / (float)getWindow().getHeight();
-    glm::mat4 projection = glm::perspective(glm::radians(45.f), aspectRatio, 0.1f, 100.f);
+    glm::mat4 projection = glm::perspective(glm::radians(fov), aspectRatio, 0.1f, 100.f);
 
     // Clear framebuffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

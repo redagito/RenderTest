@@ -20,6 +20,9 @@ class LookAroundCamera : public RenderApplication
     // Up / down rotation
     float pitch = 0.f;
 
+    // Field of view
+    float fov = 45.f;
+
     GLuint vao = 0;
     GLuint vbo = 0;
 

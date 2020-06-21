@@ -32,7 +32,8 @@ class Window
     int getKey(int code) const;
 
     // Movement delta since last frame
-    glm::vec2 getCursorMovement() const;
+    const glm::vec2& getCursorMovement() const;
+    const glm::vec2& getScrollOffset() const;
 
     // Capture mouse cursor in window area
     void setCursorCapture(bool capture);
@@ -46,9 +47,13 @@ class Window
    private:
     void onResize(unsigned int width, unsigned int height);
     void onCursorMove(double x, double y);
+    void onScroll(double xOffset, double yOffset);
 
     unsigned int m_width = 0;
     unsigned int m_height = 0;
+
+    // Scrolling offset
+    glm::vec2 m_scrollOffset = glm::vec2{0.f};
 
     // Mouse capture, default off, toggle with f1
     bool m_cursorCaptured = false;
